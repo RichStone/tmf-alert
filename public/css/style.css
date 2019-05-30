@@ -3,20 +3,37 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
 #home { background: white; max-width: 600px; margin: 50px auto 16px; padding: 32px 24px; border-radius: 3px; }
 #home h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
 #home h3 { color: #ffa100; font-weight: bold; font-size: 12px; margin: 0 0 8px; }
-#home h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 16px 0 8px;}
+#home h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 24px 0 8px;}
 #home p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
 #home a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
 #home, #home a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
 #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-#add-author {
+.add-button {
     box-shadow: 0px 0px 0px transparent;
     border: 0px solid transparent;
     text-shadow: 0px 0px 0px transparent;
     color: green;
+    font-size: larger;
 }
 
-#add-author:hover {
+.add-button:hover {
     cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    text-align: center;
 }
 
 /*

@@ -25,20 +25,40 @@
     <div id="home" style="display: none">
       <h2>Welcome <span id="user-name"></span></h2>
       <p>Here is your hub to track your favorite Authors and Keywords from the amazing TheFastlaneForum</p>
-      <h1>Authors</h1>
-      <form onsubmit="return false">
+      <h1>Tracked Authors</h1>
+      <form onsubmit="return getFalse();">
         <label class="field a-field a-field_a1 page__field">
           <input id="new-author" class="field__input a-field__input" placeholder="e.g. MJ DeMarco" required>
           <span class="a-field__label-wrap">
-            <span class="a-field__label">Exact Author Name</span>
+            <span class="a-field__label">Type Exact Author Name</span>
           </span>
         </label>
-        <button id="add-author"><i class="fas fa-plus-circle"></i></button>
+        <button id="add-author" class="add-button"><i class="fas fa-plus-circle"></i></button>
       </form>
 
-      <h1>Keywords</h1>
-      <input type="text" id="new-keyword">
-      <button id="add-keyword"><i class="fas fa-plus-circle"></i></button>
+      <h1>Tracked Keywords</h1>
+      <div id="tracked-keywords">
+        <table id="keywords-table">
+          <thead>
+            <tr>
+              <th>Keyword</th>
+              <th>Updated</th>
+            </tr>
+          </thead>
+          <tbody id="keywords-table-body">
+
+          </tbody>
+        </table>
+      </div>
+      <form id="keyword-form" onsubmit='return getFalse();'>
+        <label class="field a-field a-field_a1 page__field">
+          <input id="new-keyword" class="field__input a-field__input" placeholder="e.g. cloud business" required>
+          <span class="a-field__label-wrap">
+            <span class="a-field__label">Type Exact Keyword</span>
+          </span>
+        </label>
+        <button id="add-keyword" class="add-button"><i class="fas fa-plus-circle"></i></button>
+      </form>
     </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
 
@@ -46,6 +66,11 @@
     <div id="firebaseui-auth-container"></div>
 
     <script>
+
+      let getFalse = function () {
+        return false;
+      };
+
       document.addEventListener('DOMContentLoaded', function() {
         try {
           let app = firebase.app();
@@ -57,7 +82,7 @@
               document.getElementById('home').style.display = 'block';
               document.getElementById('user-name').textContent = user.displayName + "!" || user.email + "!";
             } else {
-              console.log("NOTHIN");
+              console.log("NOT LOGGED IN");
               // Initialize the FirebaseUI Widget using Firebase.
               var ui = new firebaseui.auth.AuthUI(firebase.auth());
               var uiConfig = {
@@ -90,8 +115,6 @@
               // The start method will wait until the DOM is loaded.
               ui.start('#firebaseui-auth-container', uiConfig);
 
-              var db = firebase.firestore();
-
             }
           });
 
@@ -102,6 +125,37 @@
           console.error(e);
           document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
+
+        firebase.auth().onAuthStateChanged(function(user) {
+          let db = firebase.firestore();
+
+          const trackedKeywords = db.collection(`users/${user.uid}/trackedKeywords/`)
+                  .onSnapshot(function (querySnapshot) {
+                    let keywordsTableBody = document.getElementById('keywords-table-body');
+                    keywordsTableBody.innerHTML = '';
+                    querySnapshot.forEach(function (doc) {
+                      console.log(doc.id, ' => ', doc.data());
+                      const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateUpdated}</td></tr>`;
+                      keywordsTableBody.appendChild(document.createElement('tr'));
+                      keywordsTableBody.lastChild.innerHTML = newRowString;
+                    });
+                  });
+
+          const authorButton = document.getElementById('add-author');
+          const keywordButton = document.getElementById('add-keyword');
+
+          keywordButton.addEventListener('click', function () {
+            const keywordInput = document.getElementById('new-keyword').value;
+            const trackedKeywords = db.doc(`users/${user.uid}/trackedKeywords/${keywordInput}`);
+            trackedKeywords.set({
+              dateUpdated: Date.now()
+            }).then(function () {
+              console.log('Keyword Saved!');
+            }).catch(function (error) {
+              console.log('Error while saving into firestore: ', error);
+            });
+          });
+        });
       });
     </script>
   </body>
