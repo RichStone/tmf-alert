@@ -25,7 +25,23 @@
 <div id="home" style="display: none">
     <h2>Welcome <span id="user-name"></span></h2>
     <p>Here is your hub to track your favorite Authors and Keywords from the amazing TheFastlaneForum</p>
+
     <h1>Tracked Authors</h1>
+
+    <div id="tracked-authors">
+        <table id="authors-table">
+            <thead>
+            <tr>
+                <th>Keyword</th>
+                <th>Updated</th>
+            </tr>
+            </thead>
+            <tbody id="authors-table-body">
+
+            </tbody>
+        </table>
+    </div>
+
     <form onsubmit="return getFalse();">
         <label class="field a-field a-field_a1 page__field">
             <input id="new-author" class="field__input a-field__input" placeholder="e.g. MJ DeMarco" required>
@@ -135,9 +151,21 @@
                     keywordsTableBody.innerHTML = '';
                     querySnapshot.forEach(function (doc) {
                         console.log(doc.id, ' => ', doc.data());
-                        const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateUpdated}</td></tr>`;
+                        const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateCreated}</td></tr>`;
                         keywordsTableBody.appendChild(document.createElement('tr'));
                         keywordsTableBody.lastChild.innerHTML = newRowString;
+                    });
+                });
+
+            const trackedAuthors = db.collection(`users/${user.uid}/trackedAuthors/`)
+                .onSnapshot(function (querySnapshot) {
+                    let authorsTableBody = document.getElementById('authors-table-body');
+                    authorsTableBody.innerHTML = '';
+                    querySnapshot.forEach(function (doc) {
+                        console.log(doc.id, ' => ', doc.data());
+                        const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateCreated}</td></tr>`;
+                        authorsTableBody.appendChild(document.createElement('tr'));
+                        authorsTableBody.lastChild.innerHTML = newRowString;
                     });
                 });
 
@@ -148,9 +176,21 @@
                 const keywordInput = document.getElementById('new-keyword').value;
                 const trackedKeywords = db.doc(`users/${user.uid}/trackedKeywords/${keywordInput}`);
                 trackedKeywords.set({
-                    dateUpdated: Date.now()
+                    dateCreated: Date.now()
                 }).then(function () {
                     console.log('Keyword Saved!');
+                }).catch(function (error) {
+                    console.log('Error while saving into firestore: ', error);
+                });
+            });
+
+            authorButton.addEventListener('click', function () {
+                const authorInput = document.getElementById('new-author').value;
+                const trackedAuthors = db.doc(`users/${user.uid}/trackedAuthors/${authorInput}`);
+                trackedAuthors.set({
+                    dateCreated: Date.now()
+                }).then(function () {
+                    console.log('Author Saved!');
                 }).catch(function (error) {
                     console.log('Error while saving into firestore: ', error);
                 });
