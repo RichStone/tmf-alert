@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Welcome to Firebase Hosting</title>
@@ -20,143 +20,143 @@
     <link type="text/css" rel="stylesheet" href="css/style.css">
     <!-- icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-  </head>
-  <body>
-    <div id="home" style="display: none">
-      <h2>Welcome <span id="user-name"></span></h2>
-      <p>Here is your hub to track your favorite Authors and Keywords from the amazing TheFastlaneForum</p>
-      <h1>Tracked Authors</h1>
-      <form onsubmit="return getFalse();">
+</head>
+<body>
+<div id="home" style="display: none">
+    <h2>Welcome <span id="user-name"></span></h2>
+    <p>Here is your hub to track your favorite Authors and Keywords from the amazing TheFastlaneForum</p>
+    <h1>Tracked Authors</h1>
+    <form onsubmit="return getFalse();">
         <label class="field a-field a-field_a1 page__field">
-          <input id="new-author" class="field__input a-field__input" placeholder="e.g. MJ DeMarco" required>
-          <span class="a-field__label-wrap">
+            <input id="new-author" class="field__input a-field__input" placeholder="e.g. MJ DeMarco" required>
+            <span class="a-field__label-wrap">
             <span class="a-field__label">Type Exact Author Name</span>
           </span>
         </label>
         <button id="add-author" class="add-button"><i class="fas fa-plus-circle"></i></button>
-      </form>
+    </form>
 
-      <h1>Tracked Keywords</h1>
-      <div id="tracked-keywords">
+    <h1>Tracked Keywords</h1>
+    <div id="tracked-keywords">
         <table id="keywords-table">
-          <thead>
+            <thead>
             <tr>
-              <th>Keyword</th>
-              <th>Updated</th>
+                <th>Keyword</th>
+                <th>Updated</th>
             </tr>
-          </thead>
-          <tbody id="keywords-table-body">
+            </thead>
+            <tbody id="keywords-table-body">
 
-          </tbody>
+            </tbody>
         </table>
-      </div>
-      <form id="keyword-form" onsubmit='return getFalse();'>
+    </div>
+    <form id="keyword-form" onsubmit='return getFalse();'>
         <label class="field a-field a-field_a1 page__field">
-          <input id="new-keyword" class="field__input a-field__input" placeholder="e.g. cloud business" required>
-          <span class="a-field__label-wrap">
+            <input id="new-keyword" class="field__input a-field__input" placeholder="e.g. cloud business" required>
+            <span class="a-field__label-wrap">
             <span class="a-field__label">Type Exact Keyword</span>
           </span>
         </label>
         <button id="add-keyword" class="add-button"><i class="fas fa-plus-circle"></i></button>
-      </form>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    </form>
+</div>
+<p id="load">Firebase SDK Loading&hellip;</p>
 
-    <div id="loader">Loading authentication...</div>
-    <div id="firebaseui-auth-container"></div>
+<div id="loader">Loading authentication...</div>
+<div id="firebaseui-auth-container"></div>
 
-    <script>
+<script>
 
-      let getFalse = function () {
+    let getFalse = function () {
         return false;
-      };
+    };
 
-      document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         try {
-          let app = firebase.app();
+            let app = firebase.app();
 
-          firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-              console.log("LOGGED");
-              document.getElementById('loader').style.display = 'none';
-              document.getElementById('home').style.display = 'block';
-              document.getElementById('user-name').textContent = user.displayName + "!" || user.email + "!";
-            } else {
-              console.log("NOT LOGGED IN");
-              // Initialize the FirebaseUI Widget using Firebase.
-              var ui = new firebaseui.auth.AuthUI(firebase.auth());
-              var uiConfig = {
-                callbacks: {
-                  signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                    // User successfully signed in.
-                    // Return type determines whether we continue the redirect automatically
-                    // or whether we leave that to developer to handle.
-                    return true;
-                  },
-                  uiShown: function() {
-                    // The widget is rendered.
-                    // Hide the loader.
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    console.log("LOGGED");
                     document.getElementById('loader').style.display = 'none';
-                  }
-                },
-                // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-                signInFlow: 'popup',
-                signInSuccessUrl: '/',
-                signInOptions: [
-                  // Leave the lines as is for the providers you want to offer your users.
-                  firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                  firebase.auth.EmailAuthProvider.PROVIDER_ID
-                ],
-                // Terms of service url.
-                tosUrl: '<your-tos-url>',
-                // Privacy policy url.
-                privacyPolicyUrl: '<your-privacy-policy-url>'
-              };
-              // The start method will wait until the DOM is loaded.
-              ui.start('#firebaseui-auth-container', uiConfig);
+                    document.getElementById('home').style.display = 'block';
+                    document.getElementById('user-name').textContent = user.displayName + "!" || user.email + "!";
+                } else {
+                    console.log("NOT LOGGED IN");
+                    // Initialize the FirebaseUI Widget using Firebase.
+                    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+                    var uiConfig = {
+                        callbacks: {
+                            signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                                // User successfully signed in.
+                                // Return type determines whether we continue the redirect automatically
+                                // or whether we leave that to developer to handle.
+                                return true;
+                            },
+                            uiShown: function() {
+                                // The widget is rendered.
+                                // Hide the loader.
+                                document.getElementById('loader').style.display = 'none';
+                            }
+                        },
+                        // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+                        signInFlow: 'popup',
+                        signInSuccessUrl: '/',
+                        signInOptions: [
+                            // Leave the lines as is for the providers you want to offer your users.
+                            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                            firebase.auth.EmailAuthProvider.PROVIDER_ID
+                        ],
+                        // Terms of service url.
+                        tosUrl: '<your-tos-url>',
+                        // Privacy policy url.
+                        privacyPolicyUrl: '<your-privacy-policy-url>'
+                    };
+                    // The start method will wait until the DOM is loaded.
+                    ui.start('#firebaseui-auth-container', uiConfig);
 
-            }
-          });
+                }
+            });
 
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+            let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+            document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
 
         } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+            console.error(e);
+            document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
         }
 
         firebase.auth().onAuthStateChanged(function(user) {
-          let db = firebase.firestore();
+            let db = firebase.firestore();
 
-          const trackedKeywords = db.collection(`users/${user.uid}/trackedKeywords/`)
-                  .onSnapshot(function (querySnapshot) {
+            const trackedKeywords = db.collection(`users/${user.uid}/trackedKeywords/`)
+                .onSnapshot(function (querySnapshot) {
                     let keywordsTableBody = document.getElementById('keywords-table-body');
                     keywordsTableBody.innerHTML = '';
                     querySnapshot.forEach(function (doc) {
-                      console.log(doc.id, ' => ', doc.data());
-                      const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateUpdated}</td></tr>`;
-                      keywordsTableBody.appendChild(document.createElement('tr'));
-                      keywordsTableBody.lastChild.innerHTML = newRowString;
+                        console.log(doc.id, ' => ', doc.data());
+                        const newRowString = `<tr><td>${doc.id}</td><td>${doc.data().dateUpdated}</td></tr>`;
+                        keywordsTableBody.appendChild(document.createElement('tr'));
+                        keywordsTableBody.lastChild.innerHTML = newRowString;
                     });
-                  });
+                });
 
-          const authorButton = document.getElementById('add-author');
-          const keywordButton = document.getElementById('add-keyword');
+            const authorButton = document.getElementById('add-author');
+            const keywordButton = document.getElementById('add-keyword');
 
-          keywordButton.addEventListener('click', function () {
-            const keywordInput = document.getElementById('new-keyword').value;
-            const trackedKeywords = db.doc(`users/${user.uid}/trackedKeywords/${keywordInput}`);
-            trackedKeywords.set({
-              dateUpdated: Date.now()
-            }).then(function () {
-              console.log('Keyword Saved!');
-            }).catch(function (error) {
-              console.log('Error while saving into firestore: ', error);
+            keywordButton.addEventListener('click', function () {
+                const keywordInput = document.getElementById('new-keyword').value;
+                const trackedKeywords = db.doc(`users/${user.uid}/trackedKeywords/${keywordInput}`);
+                trackedKeywords.set({
+                    dateUpdated: Date.now()
+                }).then(function () {
+                    console.log('Keyword Saved!');
+                }).catch(function (error) {
+                    console.log('Error while saving into firestore: ', error);
+                });
             });
-          });
         });
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>
