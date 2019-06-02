@@ -2,7 +2,6 @@ const fetch = require('node-fetch');
 const jsdom = require('jsdom');
 const Feed = require('rss-to-json');
 
-
 // getAuthors Cloud Function
 (async () => {
     try {
@@ -19,19 +18,31 @@ const Feed = require('rss-to-json');
         });
         return authors;
     } catch (e) {
-        console.log('something went wrong: ' + e);
+        console.error('getting authors failed: ' + e);
         return false;
     }
-})();
+});
 
 // getAllLinks Cloud Function
 (async () => {
     try {
-        const currTime = Date.now();
+        var timestampOneDayBefore = Date.now();
+        timestampOneDayBefore = timestampOneDayBefore - 24*360000;
+        console.log(timestampOneDayBefore);
         const url = 'https://www.thefastlaneforum.com/community/forums/-/index.rss';
-        const rssFeedResponse = await fetch(url);
-
+        Feed.load(url, (err, rss) => {
+            rss.items.forEach( (item, index, )=> {
+                //adjust for timezone difference of rss feed & Date.now()
+                const adjustedItemTimestamp = item.created + 24*360000;
+                if (adjustedItemTimestamp > timestampOneDayBefore) {
+                    console.log(index);
+                }
+            });
+            if (err) {
+                console.log('error status rss-to-json Feed.load: ' + err);
+            }
+        });
     } catch (e) {
-        console.log(e);
+        console.error("getting last 24 hour links failed: " + e);
     }
 })();
