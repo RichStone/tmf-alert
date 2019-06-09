@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 
 exports.addAuthor = functions.firestore
     .document('users/{userId}/trackedAuthors/{newAuthor}')
